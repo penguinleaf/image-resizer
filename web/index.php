@@ -1,6 +1,6 @@
 <?php
 
-if (!isset($_GET['u'] && isset($_GET['ue'])))
+if (!isset($_GET['u']) && isset($_GET['ue']))
 	return 400;
 	die("No image provided");
 
