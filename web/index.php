@@ -1,9 +1,10 @@
 <?php
 
 if (!isset($_GET['u']) && !isset($_GET['ue']))
+{
 	header('HTTP/1.1 400 Bad Request', true, 400);
 	die("No image provided");
-
+}
 $u = $_GET['u'];
 if(isset($_GET['ue'])){
 	$u = urldecode($_GET['ue']);
