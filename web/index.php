@@ -11,7 +11,7 @@ if(isset($_GET['ue'])){
 }
 $temp = tmpfile();
 
-error_log(print_r($_SERVER['referrer'], TRUE)); 
+//error_log(print_r($_SERVER['referrer'], TRUE)); 
 
 $ch = curl_init($u);
 curl_setopt($ch, CURLOPT_FILE, $temp);
@@ -22,7 +22,13 @@ curl_close($ch);
 fseek($temp, 0);
 
 $thumb = new Imagick();
+try{
 $thumb->readImageFile($temp); 
+}
+catch(ImagickException $e){
+	echo $e->Message()."\n";
+	die("Imagik Error")
+} 
 $thumb->resizeImage($_GET['w'], $_GET['h'],  imagick::FILTER_LANCZOS, 1, TRUE);
 
 $newfile = tmpfile();
