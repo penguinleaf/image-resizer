@@ -25,9 +25,13 @@ $thumb = new Imagick();
 try{
 $thumb->readImageFile($temp); 
 }
-catch(ImagickException $e){
-	echo $e->Message()."\n";
-	die("Imagik Error")
+catch(ImagikException $e){
+	//print_r($e)."\n";
+	//print_r(Imagick::queryFormats());
+	//die("Imagik Error");
+	error_log($e->message);
+	header("Location: $u");
+	die();
 } 
 $thumb->resizeImage($_GET['w'], $_GET['h'],  imagick::FILTER_LANCZOS, 1, TRUE);
 
