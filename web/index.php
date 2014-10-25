@@ -8,10 +8,12 @@ if (!isset($_GET['u']) && !isset($_GET['ue']))
 
 if(isset($_GET['ue'])){
 	$u = urldecode($_GET['ue']);
+	$u = str_replace(" ","+",$u);
 }
 else{
 	$u = $_GET['u'];
 }
+
 $tempname = tempnam(sys_get_temp_dir(), "image");
 $temp = fopen($tempname, "w+");
 
@@ -27,7 +29,7 @@ fseek($temp, 0);
 
 if (filesize($tempname) === 0){
 	header('HTTP/1.1 404 File Not Found', true, 404);
-	die("Could not download file");
+	die("Could not download $u");
 }
 //$temp = fopen($u, "rb");
 
