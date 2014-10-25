@@ -16,36 +16,22 @@ else{
 
 $tempname = tempnam(sys_get_temp_dir(), "image");
 
-//error_log(print_r($_SERVER['referrer'], TRUE)); 
-
-// $ch = curl_init($u);
-// curl_setopt($ch, CURLOPT_FILE, $temp);
-// curl_setopt($ch, CURLOPT_HEADER, 0);
-// curl_exec($ch);
-// curl_close($ch);
 file_put_contents($tempname, file_get_contents($u));
-//$temp = fopen($tempname, "w+");
+
 fseek($temp, 0);
 
 if (filesize($tempname) === 0){
 	header('HTTP/1.1 404 File Not Found', true, 404);
 	die("Could not download $u");
 }
-//$temp = fopen($u, "rb");
 
 $thumb = new Imagick($tempname);
-// try{
-//$thumb->readImageFile($temp); 
-// }
-// catch(Exception $e){
-	//print_r($e)."\n";
-	//print_r(Imagick::queryFormats());
-	//die("Imagik Error");
-  //	error_log($e->message());
-// 	header("Location: $u");
-// 	die();
-// } 
-$thumb->resizeImage($_GET['w'], $_GET['h'],  imagick::FILTER_LANCZOS, 1, TRUE);
+
+// Use semaphors to prevent too many simultanious image resizes, which can slow the server to a crawl.
+$s = sem_get("imageResizeSemaphor", 2);
+sem_acquire($s);
+	$thumb->resizeImage($_GET['w'], $_GET['h'],  imagick::FILTER_LANCZOS, 1, TRUE);
+sem_release($s);
 
 $newfile = tmpfile();
 $thumb->writeImageFile($newfile);
@@ -55,7 +41,6 @@ $mime = getimagesizefromstring(fread($newfile))["mime"];
 fseek($newfile, 0);
 
 header('Content-Type:'.$mime);
-//header('Content-Type:'."text/plain");
 header("Cache-Control: max-age=2592000");
 fseek($newfile,0,SEEK_END);
 $length = ftell($newfile);
