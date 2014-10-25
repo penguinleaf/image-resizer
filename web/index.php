@@ -14,12 +14,12 @@ $temp = fopen($tempname, "w+");
 
 //error_log(print_r($_SERVER['referrer'], TRUE)); 
 
-$ch = curl_init($u);
-curl_setopt($ch, CURLOPT_FILE, $temp);
-curl_setopt($ch, CURLOPT_HEADER, 0);
-curl_exec($ch);
-curl_close($ch);
-//fwrite($temp, file_get_contents($_GET["u"]));
+// $ch = curl_init($u);
+// curl_setopt($ch, CURLOPT_FILE, $temp);
+// curl_setopt($ch, CURLOPT_HEADER, 0);
+// curl_exec($ch);
+// curl_close($ch);
+fwrite($temp, file_get_contents($_GET["u"]));
 fseek($temp, 0);
 
 //$temp = fopen($u, "rb");
