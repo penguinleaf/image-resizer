@@ -25,6 +25,10 @@ $temp = fopen($tempname, "w+");
 fwrite($temp, file_get_contents($_GET["u"]));
 fseek($temp, 0);
 
+if (filesize($tempname) === 0){
+	header('HTTP/1.1 404 File Not Found', true, 404);
+	die("Could not download file");
+}
 //$temp = fopen($u, "rb");
 
 $thumb = new Imagick($tempname);
