@@ -1,11 +1,11 @@
 <?php
-
+set_time_limit(0);
 if (!isset($_GET['u']) && !isset($_GET['ue']))
 {
 	header('HTTP/1.1 400 Bad Request', true, 400);
 	die("No image provided");
 }
-$u = $_GET['u'];
+$u = $_GET['u'] || "";
 if(isset($_GET['ue'])){
 	$u = urldecode($_GET['ue']);
 }
@@ -21,18 +21,20 @@ curl_close($ch);
 //fwrite($temp, file_get_contents($_GET["u"]));
 fseek($temp, 0);
 
+//$temp = fopen($u, "rb");
+
 $thumb = new Imagick();
-try{
+// try{
 $thumb->readImageFile($temp); 
-}
-catch(ImagikException $e){
+// }
+// catch(Exception $e){
 	//print_r($e)."\n";
 	//print_r(Imagick::queryFormats());
 	//die("Imagik Error");
-	error_log($e->message);
-	header("Location: $u");
-	die();
-} 
+  //	error_log($e->message());
+// 	header("Location: $u");
+// 	die();
+// } 
 $thumb->resizeImage($_GET['w'], $_GET['h'],  imagick::FILTER_LANCZOS, 1, TRUE);
 
 $newfile = tmpfile();
