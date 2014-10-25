@@ -1,5 +1,5 @@
 <?php
-set_time_limit(0);
+set_time_limit(120);
 if (!isset($_GET['u']) && !isset($_GET['ue']))
 {
 	header('HTTP/1.1 400 Bad Request', true, 400);
@@ -15,7 +15,6 @@ else{
 }
 
 $tempname = tempnam(sys_get_temp_dir(), "image");
-$temp = fopen($tempname, "w+");
 
 //error_log(print_r($_SERVER['referrer'], TRUE)); 
 
@@ -24,7 +23,8 @@ $temp = fopen($tempname, "w+");
 // curl_setopt($ch, CURLOPT_HEADER, 0);
 // curl_exec($ch);
 // curl_close($ch);
-fwrite($temp, file_get_contents($_GET["u"]));
+file_put_contents($tempname, file_get_contents($u));
+//$temp = fopen($tempname, "w+");
 fseek($temp, 0);
 
 if (filesize($tempname) === 0){
