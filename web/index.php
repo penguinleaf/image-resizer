@@ -9,7 +9,8 @@ $u = $_GET['u'] || "";
 if(isset($_GET['ue'])){
 	$u = urldecode($_GET['ue']);
 }
-$temp = tmpfile();
+$tempname = tempnam(sys_get_temp_dir(), "image");
+$temp = fopen($tempname, "w+");
 
 //error_log(print_r($_SERVER['referrer'], TRUE)); 
 
@@ -23,9 +24,9 @@ fseek($temp, 0);
 
 //$temp = fopen($u, "rb");
 
-$thumb = new Imagick();
+$thumb = new Imagick($tempname);
 // try{
-$thumb->readImageFile($temp); 
+//$thumb->readImageFile($temp); 
 // }
 // catch(Exception $e){
 	//print_r($e)."\n";
@@ -55,5 +56,7 @@ print(fread($newfile, $length));
 
 fclose($temp);
 fclose($newfile);
+
+unlink($tempname);
 
 ?>
